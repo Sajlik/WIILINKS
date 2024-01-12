@@ -1,15 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const user_route = express.Router() 
+const userController=require('../controllers/userController')
 
-const userController = require('../controllers/userController')
-
-
-
-router.get('/signup',userController.signup_get)
-router.post('/signup',userController.signup_post)
-router.get('/login',userController.login_get)
-router.post('/login',userController.login_post)
-router.get('/dashboard',userController.dashboard_get)
-router.post('/dashboard',userController.dashboard_post)
-module.exports=router;
+user_route.get('/signup',userController.signup_get);
+user_route.post('/signup',userController.signup_post);
+user_route.get('/login',userController.login_get);
+user_route.post('/login',userController.login_post);
+module.exports=user_route
 
