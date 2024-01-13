@@ -1,43 +1,83 @@
-const mongoose= require("mongoose")
 
-const userSchema= new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        required:true,
-       
+    email: {
+        type: String,
+        required: true
     },
-   
-   
-    passwordHash:{
-        type:String,
-        required:true,
-       
+    phone: {
+        type: Number,
+        required: true,
+        unique: true
     },
-    phone:{
-        type:String,
-        required:true,
+    
+    password: {
+        type: String
     },
-    isAdmin:{
-        type:Boolean,
-        default:false
+    cpassword: {
+        type: String
     },
-    street:{
-        type:String,
-        defaults:''
-    }
-   
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    wishlist: [{
+        productId: {
+            type: String,
+            ref: 'product'
+        },
+        date: {
+            type: Date,
+            default: Date.now()
+        }
+    }],
+    usedCoupons: [{
+        couponCode: {
+            type: String
+        }
+    }],
+    wallet: {
+        balance: {
+            type: Number,
+            default: 0
+        },
+        currency: {
+            type: String,
+            default: 'INR'
+        }, transactions: [
+            {
+                type: { type: String, },
+                amount: { type: Number },
+                description: { type: String },
+                time: { type: Date, default: Date.now() }
+            }
+        ]
+    },
+    created_at: {
+        type: Date,
+        default: Date.now()
+    },
+    blocked_at: {
+        type: Date
+    },
+    unBlocked_at: {
+        type: Date
+    },
+    verified: {
+        type: Boolean
+    },
+    is_admin: {
+        type: Number,
+        required: false
+      },
     
 })
-
-userSchema.virtual('id').get(function(){
-    return this._id.toHexString()
-})
-userSchema.set('toJSON',{
-    virtuals:true,
-})
-const User=mongoose.model('user',userSchema)
-module.exports=User
+const User = mongoose.model('user', userSchema)
+module.exports = User

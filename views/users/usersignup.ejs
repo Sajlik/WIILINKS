@@ -1,0 +1,73 @@
+<%- include('../layouts/header.ejs') %>
+<script>
+  if(window.history.replaceState)
+  {
+    window.history.replaceState(null,null,window.location.href)
+  }
+</script>
+
+      <main class="main mb-4">
+        <div class="container">
+          <div class="row main-in">
+        <div class="card text-center maincard col-md-8 col-12 col-lg-6 " >
+            <div class="card-body mainbody">
+              <h5 class="card-title mt-4 form-title">SIGNUP</h5>
+              <form class="form1 w-100" id="signupform" method="post" action="/signup">
+               <% if(locals.err) { %> 
+                <div class="error1 alert alert-danger w-75"><%= locals.err  %></div>
+                <% } %>
+               <div class="naming mb-5 w-75">
+                 <div class=" field w-75 ">
+                  <input type="text" class="form-control input input1 " placeholder="" name="firstname" id="firstname" aria-describedby="emailHelp">
+                  <label for="firstname" class="form-label label">First Name</label>
+                  <p class="error mb-2" id="fnameerror" style="display: none;"></p>
+                </div>
+                <div class=" field w-75 ">
+                    <input type="text" class="form-control input input1 " placeholder="" name="lastname" id="lastname" aria-describedby="emailHelp">
+                    <label for="lastname" class="form-label label">Last Name</label>
+                  <p class="error mb-2" id="lnameerror" style="display: none;"></p>
+                  </div>
+                </div>
+                  <div class="naming w-100">
+                    <div class="mb-5 field w-75 ">
+                    <input type="email" class="form-control input " placeholder="" name="email" id="email" aria-describedby="emailHelp">
+                    <label for="email" class="form-label label">Email address</label>
+                  <p class="error mb-2" id="emailerror" style="display: none;"></p>
+                  </div>
+                </div>
+
+                <div class="naming w-75">
+                    <div ><select class="numberbtn" name="countrycode" id="country-code">
+                        <option class="text-center " value="91">+91 India</option>
+                        <option class="text-center " value="1">+1 </option>
+                        <option class="text-center " value="44">+44 </option>
+                    </select></div>
+                    <div class="mb-5 field w-75 ">
+                    <input type="number" class="form-control input " placeholder="" name="mobile" id="mobile" aria-describedby="emailHelp">
+                    <label for="mobile" class="form-label label">Mobile</label>
+                  <p class="error mb-2" id="moberror" style="display: none;"></p>
+                  </div>
+                </div>
+                <div class="my-5 field w-75 ">
+                  <input type="password" class="form-control input " placeholder="" name="password" id="password">
+                  <label for="password" class="form-label label">Password</label>
+                  <p class="error mb-2" id="passerror" style="display: none;"></p>
+                </div>
+                <div class="my-5 field w-75 ">
+                    <input type="password" class="form-control input " placeholder="" name="confirmpassword" id="confirmpassword">
+                    <label for="confirmpassword" class="form-label label">Confirm Password</label>
+                  <p class="error mb-2" id="confirmpasserror" style="display: none;"></p>
+                  </div>
+                <input type="submit" class="logbtn mt-5" value="SIGNUP">
+
+                <div class="form-text forgot mb-5">Already have an account ?.<a href="/login">Sign In</a></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        </div>
+      </main>
+
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="/public/js/signup.js"></script>
+      <%- include('../layouts/footer.ejs') %>

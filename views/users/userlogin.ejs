@@ -1,0 +1,42 @@
+<%- include('../layouts/header.ejs') %>
+<script>
+  if(window.history.replaceState)
+  {
+    window.history.replaceState(null,null,window.location.href)
+  }
+</script>
+      <main class="main mb-4">
+        <div class="container">
+          <div class="row main-in">
+        <div class="card text-center maincard col-md-8 col-12 col-lg-6 " >
+            <div class="card-body mainbody">
+              <h5 class="card-title form-title">LOGIN</h5>
+              <form method="post" action="/login" id="userlogform" class="form w-100">
+                <% if(locals.err) { %> 
+                  <div class="error1 alert alert-danger w-75"><%= locals.err  %></div>
+                  <% } %>
+                <div class="my-5 field w-75 ">
+                  <input type="email" class="form-control input " placeholder="" name="email" id="email" aria-describedby="emailHelp">
+                  <label for="email" class="form-label label">Email address</label>
+                  <p class="error mb-2" id="emailerror" style="display: none;"></p>
+                </div>
+                <div class="my-2 field w-75 ">
+                  <input type="password" class="form-control input " placeholder="" name="password" id="password">
+                  <label for="password" class="form-label label">Password</label>
+                  <p class="error mb-2" id="passerror" style="display: none;"></p>
+                </div>
+                <div class="form-text forgot mt-5"><a href="">Forgot Password</a></div>
+                <input type="submit" class="logbtn" id="logbtn" value="SIGNIN">
+
+                <div class="form-text forgot">Don't have an account ?.<a href="/signup">Create account</a></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        </div>
+      </main>
+<script src="/public/js/login.js"></script>
+<%- include('../layouts/footer.ejs') %>
+
+
+    

@@ -1,41 +1,33 @@
-const express=require('express')
-const app=express()
-const morgan=required('morgan')
-const mongoose= require('mongoose')
+const express = require("express")
+const nocache = require('nocache')
+const path = require('path')
+const bcrypt = require('bcrypt')
+const cookieParser = require("cookie-parser")
 
-app.use(bodyParser.json());
-app.use(morgan('tiny'))
 
-require('dotenv/config')
+const app = express()
+require('dotenv').config()
 
-app.get('/',(req,res)=>{
-    res.send('hello API')
-})
-app.get('/products',(req,res)=>{
- 
-       const product=new Product({
-         name:req.body.name,
-         image:req.body.image,
-         countInStock:req.body.countInStock
-       })
+const PORT = process.env.PORT 
 
-    product.save().then((createdProduct=>{
-          res.status(201).json(createdProduct)
-    }))
-    res.send('hello ApI')
-})
-mongoose.connect(process.env.CONNECTION_STRING,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-    dbname:'eshop-database'
-})
-.then(()=>{
-    console.log('Database connected is ready..');
-})
-.catch((err)=>{
-    console.log(err);
-})
-app.listen(3000,()=>{
-    console.log(api);
-    console.log('server running http://localhost:3000');
+const connectDB = require('./config/database')
+const userRoute = require('./routes/userRoute')
+const adminRoute = require('./routes/adminRoute')
+
+connectDB.connection()
+
+app.use(cookieParser());
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.set("view engine","ejs")
+app.use("/public",express.static(path.join(__dirname,"/public")))
+
+app.use(nocache())
+
+app.use("/",userRoute)
+
+
+
+app.listen(PORT,()=>{
+    console.log(`Server running on http://localhost:${PORT}`)
 })
