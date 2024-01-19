@@ -3,8 +3,8 @@ Bootstrap with custom variables
 =================== */
 /*!
  * Bootstrap v5.0.0-beta1 (https://getbootstrap.com/)
- * Copyright 2011-2022 The Bootstrap Authors
- * Copyright 2011-2022 Twitter, Inc.
+ * Copyright 2011-2020 The Bootstrap Authors
+ * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 :root {
@@ -2153,7 +2153,7 @@ progress {
 
 .table-dark {
   --bs-table-bg: #141432;
-  --bs-table-striped-bg: #20223c;
+  --bs-table-striped-bg: #20203c;
   --bs-table-striped-color: #fff;
   --bs-table-active-bg: #2c2c47;
   --bs-table-active-color: #fff;
@@ -5139,15 +5139,12 @@ fieldset:disabled .btn {
 .card-img-top,
 .card-img-bottom {
   width: 100%;
-  
 }
 
 .card-img,
 .card-img-top {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
-  object-fit: contain;
-
 }
 
 .card-img,
@@ -5356,7 +5353,7 @@ fieldset:disabled .btn {
   float: left;
   padding-right: 0.5rem;
   color: #6c757d;
-  content: var(--bs-breadcrumb-divider, "/") /* rtl: var(--bs-breadcrumb-divider, "/") */;
+  content: var(--bs-breadcrumb-divider, "http://wp.alithemes.com/") /* rtl: var(--bs-breadcrumb-divider, "/") */;
 }
 
 .breadcrumb-item.active {

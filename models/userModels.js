@@ -1,83 +1,35 @@
-
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     phone: {
         type: Number,
         required: true,
-        unique: true
+        unique:true
     },
-    
-    password: {
+   password: {
+        type: String,
+        required:true
+    },
+    createdOn: {
         type: String
     },
-    cpassword: {
-        type: String
-    },
-    isDeleted: {
+    isBlocked: {
         type: Boolean,
         default: false
     },
-    wishlist: [{
-        productId: {
-            type: String,
-            ref: 'product'
-        },
-        date: {
-            type: Date,
-            default: Date.now()
-        }
-    }],
-    usedCoupons: [{
-        couponCode: {
-            type: String
-        }
-    }],
-    wallet: {
-        balance: {
-            type: Number,
-            default: 0
-        },
-        currency: {
-            type: String,
-            default: 'INR'
-        }, transactions: [
-            {
-                type: { type: String, },
-                amount: { type: Number },
-                description: { type: String },
-                time: { type: Date, default: Date.now() }
-            }
-        ]
+    isAdmin: {
+        type: String,
+        default: "0"
     },
-    created_at: {
-        type: Date,
-        default: Date.now()
-    },
-    blocked_at: {
-        type: Date
-    },
-    unBlocked_at: {
-        type: Date
-    },
-    verified: {
-        type: Boolean
-    },
-    is_admin: {
-        type: Number,
-        required: false
-      },
-    
-})
-const User = mongoose.model('user', userSchema)
-module.exports = User
+});
+
+module.exports = mongoose.model("User", userSchema);

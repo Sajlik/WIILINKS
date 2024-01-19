@@ -1,21 +1,32 @@
 const express = require("express");
-const user_route = express.Router() 
+const userRoute = express.Router() 
 const userController=require('../controllers/userController')
-const userAuth = require("../middleware/userAuth")
-user_route.get('/',userController.loginredirect)
+const { isLogged } = require("../middileware/auth.js")
 
-user_route.get('/login',userAuth.isLogout,userController.loginload)
-user_route.post('/login',userAuth.isLogout,userController.login)
-user_route.get('/logout',userAuth.isLogin,userController.logout)
+userRoute.get("/pageNotFound", userController.pageNotFound)
 
-user_route.get('/signup',userAuth.isLogout,userController.signupload)
-user_route.post('/signup',userAuth.isLogout,userController.signup)
-user_route.get('/sendotp',userAuth.isLogout,userController.sendotp)
-user_route.get('/otpload',userAuth.isLogout,userController.otpload)
-user_route.post('/otpload',userAuth.isLogout,userController.verifyotp)
+// User actions
+userRoute.get("/", userController.loadLandingPage,)
+userRoute.get("/login", userController.getLoginPage)
+userRoute.post("/login", userController.userLogin)
+userRoute.get("/signup", userController.getSignupPage)
+userRoute.post("/verify-otp", userController.verifyOtp)
+userRoute.post("/resendOtp", userController.resendOtp)
+userRoute.post("/signup", userController.signupUser)
+userRoute.get("/logout", isLogged, userController.getLogoutUser)
+// userRoute.get("/forgotPassword", userProfileController.getForgotPassPage)
+// userRoute.post("/forgotEmailValid", userProfileController.forgotEmailValid)
+// userRoute.post("/verifyPassOtp", userProfileController.verifyForgotPassOtp)
+// userRoute.get("/resetPassword", userProfileController.getResetPassPage)
+// userRoute.post("/changePassword", userProfileController.postNewPassword)
+// userRoute.get("/", userController.getHomePage)
+// userRoute.get("/login", userController.getLoginPage)
+// userRoute.post("/login", userController.userLogin)
+// userRoute.get("/signup", userController.getSignupPage)
+// userRoute.post("/verify-otp", userController.verifyOtp)
+// userRoute.post("/resendOtp", userController.resendOtp)
+// userRoute.post("/signup", userController.signupUser)
+// userRoute.get("/logout", isLogged, userController.getLogoutUser)
 
-
-user_route.get('/otplogin',userAuth.isLogout,userController.otplogin)
-user_route.post('/otplogin',userAuth.isLogout,userController.verifyotplogin)
-module.exports=user_route
+module.exports=userRoute
 

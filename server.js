@@ -1,33 +1,46 @@
-const express = require("express")
-const nocache = require('nocache')
-const path = require('path')
-const bcrypt = require('bcrypt')
-const cookieParser = require("cookie-parser")
+const express=require('express')
+const app=express()
 
+const path=require("path")
+const bodyParser=require("body-parser")
+const session= require("express-session")
 
-const app = express()
-require('dotenv').config()
+const nocache=require("nocache")
+const morgan=require("morgan")
 
-const PORT = process.env.PORT 
+const PORT=process.env.PORT||7000
+const dotenv=require("dotenv")
+dotenv.config()
 
-const connectDB = require('./config/database')
-const userRoute = require('./routes/userRoute')
-const adminRoute = require('./routes/adminRoute')
+require("./config/database")
 
-connectDB.connection()
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:true}))
 
-app.use(cookieParser());
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.set("view engine","ejs")
-app.use("/public",express.static(path.join(__dirname,"/public")))
+app.use(session({
+    secret:process.env.SESSION_SECRET_KEY,
+    resave:false,
+    saveUninitialized:false,
+    cookie:{
+        maxAge:72 * 60 * 60 * 1000,
+        httpOnly:true
+    }
+}))
 
-app.use(nocache())
+app.set("view engine", "ejs")
+app.set("views",[path.join(__dirname,"views/users"),path.join(__dirname,"views/admin")])
 
-app.use("/",userRoute)
+// app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static("public"))
+const userRoutes=require("./routes/userRoute")
+const adminRoutes=require("./routes/adminRoute")
 
+app.use("/",userRoutes)
+app.use("/admin",adminRoutes)
 
-
-app.listen(PORT,()=>{
-    console.log(`Server running on http://localhost:${PORT}`)
+app.get('*', function(req,res){
+    res.redirect("/pageNotFound")
 })
+
+app.listen(PORT,()=>console.log(`server running on http://localhost:${PORT}`));
