@@ -1,6 +1,7 @@
 const User = require('../models/userModels');
 const Category = require('../models/categoryModel');
 const Product = require('../models/product');
+const Coupon = require("../models/couponModel")
  // Import the 'Images' model
 
 const  nodemailer=require("nodemailer")
@@ -281,6 +282,39 @@ const getLogoutUser = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const applyCoupon = async (req, res)=>{
+    try {
+        const userId = req.session.user
+        console.log(req.body);
+        const selectedCoupon = await Coupon.findOne({name : req.body.coupon})
+        // console.log(selectedCoupon);
+        if(!selectedCoupon){
+            console.log("no coupon");
+            res.json({noCoupon : true})
+        }else if(selectedCoupon.userId.includes(userId)){
+            console.log("already used");
+            res.json({used : true})
+        }else{
+            console.log("coupon exists");
+            await Coupon.updateOne(
+                { name: req.body.coupon },
+                {
+                    $addToSet: {
+                        userId: userId
+                    }
+                }
+            );
+            const gt = parseInt(req.body.total)-parseInt(selectedCoupon.offerPrice);
+            console.log(gt,"----");
+            res.json({gt : gt, offerPrice : parseInt(selectedCoupon.offerPrice)})
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 // loading register page---
 // const loadRegister = async (req, res) => {
 //     try {
@@ -507,6 +541,7 @@ module.exports = {
     pageNotFound,
     getSignupPage,
     loadLandingPage,
+    applyCoupon
  
    
    

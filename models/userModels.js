@@ -30,6 +30,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "0"
     },
+    cart: {
+        type: Array
+    },
+    
+    wallet : {
+        type : Number,
+        default : 0
+    },
+    history : {
+        type : Array
+    }
 });
 
 module.exports = mongoose.model("User", userSchema);

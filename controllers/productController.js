@@ -128,7 +128,7 @@ const editProduct = async (req, res) => {
             console.log("product updated");
             res.redirect("/admin/products")
         } else {
-            console.log("No images i thter")
+            console.log("No images is there")
             const updatedProduct = await Product.findByIdAndUpdate(id, {
                 id: Date.now(),
                 productName: data.productName,

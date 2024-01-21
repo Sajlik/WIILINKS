@@ -49,7 +49,11 @@ var ProductSchema = new mongoose.Schema({
     isListed:{
         type:Boolean,
         default:true
-    }
+    },
+    isBlocked : {
+        type : Boolean,
+        default : false,
+    },
 }, { timestamps: true });
 
 // Export the model
