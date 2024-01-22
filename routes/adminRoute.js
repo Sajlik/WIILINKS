@@ -21,7 +21,10 @@ admin_router.post("/login", admincontroller.verifyLogin)
 admin_router.get("/logout", isAdmin, admincontroller.getLogout)
 admin_router.get("/", isAdmin, admincontroller.loadDashboard)
 
-
+//  admin_router.get('/show-graph/:timetype', admincontroller.showGraph)
+admin_router.get('/getgraphweek',admincontroller.getWeekGraph)
+admin_router.get('/getgraphmonth',admincontroller.getMonthGraph)
+admin_router.get('/getgraphyear',admincontroller.getYearGraph)
 
 
  admin_router.get("/category", isAdmin, categoryController.getCategoryInfo)
@@ -51,6 +54,12 @@ admin_router.get("/unblockCustomer", isAdmin, customerController.getCustomerUnbl
 admin_router.get("/orderList", isAdmin, orderController.getOrderListPageAdmin)
 admin_router.get("/orderDetailsAdmin", isAdmin, orderController.getOrderDetailsPageAdmin)
 admin_router.get("/changeStatus", isAdmin,orderController.changeOrderStatus)
+
+ admin_router.get("/sales-report", admincontroller.salesReportpage);
+ admin_router.get("/sales-data/yearly", admincontroller.getSalesDataYearly);
+ admin_router.get("/get/sales-report", admincontroller.generateSalesReport);
+ admin_router.get("/sales-data", admincontroller.getSalesData);
+ admin_router.get("/sales-data/weekly", admincontroller.getSalesDataWeekly);
 
 // admin_router.get("/coupon", couponController.couponspage);
 // admin_router.get("/coupon/add", couponController.addCoupon);

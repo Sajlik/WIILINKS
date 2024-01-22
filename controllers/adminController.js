@@ -6,16 +6,16 @@ const bcrypt = require("bcrypt")
 const Product = require("../models/product");
 const  numeral = require("numeral");
 const moment = require("moment")
-
+const filter = require('../helpers/cronFilter.js')
 const helpers = require('../helpers/adminHelpers')
 
-const getDashboard = async (req, res) => {
-    try {
-        res.render("index")
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+// const getDashboard = async (req, res) => {
+//     try {
+//         res.render("index")
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
 
 const getLoginPage = async (req, res) => {
     try {
@@ -45,7 +45,7 @@ const verifyLogin = async (req, res) => {
                 res.redirect("/admin/login")
             }
         } else {
-            console.log("He's not an admin");
+            console.log("Not an admin");
         }
     } catch (error) {
         console.log(error.message);
@@ -131,11 +131,11 @@ const loadDashboard = expressHandler(async (req, res) => {
         const allOrders = await helpers.getAllOrders();
         const todoMessage = await helpers.getTodoList();
 
-        var totalSales = 0;
-        for (let i = 0; i < allOrders.length; i++) {
-            totalSales += allOrders[i].totalAmount + allOrders[i].walletAmount
-        }
-        const topProducts = await mostPurchasedProducts();
+        // var totalSales = 0;
+        // for (let i = 0; i < allOrders.length; i++) {
+        //     totalSales += allOrders[i].totalAmount + allOrders[i].walletAmount
+        // }
+   
         // console.log(topProducts)
         const timeWiseOrders = await helpers.timeWiseOrders()
 
@@ -157,7 +157,7 @@ const loadDashboard = expressHandler(async (req, res) => {
             totalSoldProducts: totalSoldProducts[0].total_sold_count,
             allOrders,
             todoMessage,
-            totalSales,
+          
             newarr,
             graph: { day },
         });
@@ -166,59 +166,10 @@ const loadDashboard = expressHandler(async (req, res) => {
     }
 });
 
-//  const loadDashboard = expressHandler(async (req, res) => {
-//      try {
-//          const messages = req.flash();
-//          const user = req?.user;
-//          const recentOrders = await Order.find()
-//              .limit(3)
-//              .populate({
-//                  path: "user",
-//                  select: "firstName lastName image",
-//              })
-//              .populate("orderItems")
-//              .select("totalAmount orderedDate totalPrice")
-//              .sort({ _id: -1 });
 
-//          let totalSalesAmount = 0;
-//          recentOrders.forEach((order) => {
-//              totalSalesAmount += order.totalPrice;
-//          });
-
-//          totalSalesAmount = numeral(totalSalesAmount).format("0.0a");
-
-//          const totalSoldProducts = await Product.aggregate([
-//              {
-//                  $group: {
-//                      _id: null,
-//                      total_sold_count: {
-//                          $sum: "$sold",
-//                      },
-//                  },
-//              },
-//          ]);
-
-//          const totalOrderCount = await Order.countDocuments();
-//          const totalActiveUserCount = await User.countDocuments({ isBlock: false });
-
-//          res.render("admin/pages/dashboard", {
-//              title: "Dashboard",
-//              user,
-//              messages,
-//              recentOrders,
-//              totalOrderCount,
-//              totalActiveUserCount,
-//              totalSalesAmount,
-//              moment,
-//              totalSoldProducts: totalSoldProducts[0].total_sold_count,
-//          });
-//      } catch (error) {
-//          throw new Error(error);
-//      }
-//  });
  const salesReportpage = expressHandler(async (req, res) => {
      try {
-         res.render("admin/pages/sales-report", { title: "Sales Report" });
+         res.render("sales-report", { title: "Sales Report" });
      } catch (error) {
          throw new Error(error);
      }
@@ -229,7 +180,8 @@ const generateSalesReport = async (req, res, next) => {
         const fromDate = new Date(req.query.fromDate);
         const toDate = new Date(req.query.toDate);
         const paymentMethod = req.query.paymentMethod;
-
+        console.log(fromDate)
+        console.log(toDate)
         // Create a filter object based on the selected payment method
         let paymentMethodFilter;
         if (paymentMethod !== 'all') {
@@ -239,19 +191,120 @@ const generateSalesReport = async (req, res, next) => {
         }
 
         const salesData = await Order.find({
-            orderedDate: {
+            createdOn: {
                 $gte: fromDate,
                 $lte: toDate,
             },
             ...paymentMethodFilter,
         }).select("orderId totalPrice orderedDate payment_method -_id");
-        
+        console.log(salesData)
         res.status(200).json(salesData);
     } catch (error) {
         console.error(error);
         next(error);
     }
 };
+
+async function getWeekGraph(req,res){
+    try {
+        const weekLimits = filter.weekly()
+        // console.log(weekLimits)
+        // console.log("entered")
+        const firstWeekDet = await Order.aggregate([{$match:{createdOn:{$gte:weekLimits.firstWeek,$lt:weekLimits.secondWeek}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}} ])
+        const secondWeekDet = await Order.aggregate([{$match:{createdOn:{$gte:weekLimits.secondWeek,$lt:weekLimits.thirdWeek}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}} ])
+        const thirdWeekDet = await Order.aggregate([{$match:{createdOn:{$gte:weekLimits.thirdWeek,$lt:weekLimits.fourthWeek}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}} ])
+        const fourthWeekDet = await Order.aggregate([{$match:{createdOn:{$gte:weekLimits.fourthWeek,$lt:weekLimits.fifthWeek}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}} ])
+
+
+
+
+        let first = 0,second = 0,third = 0 ,fourth = 0
+        if(firstWeekDet[0]!== undefined)
+        {
+            first = firstWeekDet[0].totalPrice
+        }
+        if(secondWeekDet[0]!== undefined)
+        {
+            second = secondWeekDet[0].totalPrice
+        } if(thirdWeekDet[0]!== undefined)
+        {
+            third = thirdWeekDet[0].totalPrice
+        } if(fourthWeekDet[0]!== undefined)
+        {
+            fourth = fourthWeekDet[0].totalPrice
+        }
+        const weekDataToChart = [first,second,third,fourth]
+         console.log(weekDataToChart)
+        if(weekDataToChart)
+        {
+            res.json({weekData:weekDataToChart})
+        }
+        else{
+            res.json({err:"Error in weekdata"})
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+
+}
+
+async function getMonthGraph(req,res){
+    try {
+        const monthdata = filter.monthly()
+
+
+        let monthdetails = []
+
+        for(let i = 0; i< monthdata.length;i++)
+        {
+            const currentData = await Order.aggregate([{$match:{createdOn:{$gte:monthdata[i].monthStart,$lt:monthdata[i].monthEnd}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}}])
+
+            monthdetails.push({
+                month:monthdata[i].monthName,
+                amount:currentData[0]?currentData[0].totalPrice : 0
+            })
+        }
+        // console.log(monthdetails)
+        if(monthdetails.length > 0 )
+        {
+            res.json({monthdata:monthdetails})
+        }
+        else{
+            res.json({montherror:"Cannot fetch MonthData"})
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+async function getYearGraph(req,res){
+    try {
+        const yearLimits = filter.yearly()
+        // console.log(yearLimits)
+
+        let yeardata = []
+
+        for(let i = 0;i < yearLimits.length;i++)
+        {
+            const yeardatas = await Order.aggregate([{$match:{createdOn:{$gte:yearLimits[i].yearStart,$lt:yearLimits[i].yearEnd}}},{$project:{_id:0,totalPrice:1}},{$group:{_id:null,totalPrice:{$sum:'$totalPrice'}}},{$project:{_id:0,totalPrice:1}}])
+            
+            yeardata.push({
+                year:2023 + i,
+                amount:yeardatas[0] ? yeardatas[0].totalPrice : 0
+            })
+        }
+        
+        if(yeardata.length > 0)
+        {
+            res.json({yeardata:yeardata})
+        }
+        else{
+            res.json({yearerr:"Cannot fetch year data"})
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function showGraph(req, res) {
     try {
@@ -359,7 +412,7 @@ const getSalesDataYearly = async (req, res) => {
           
 
         const yearlySalesArray = await Order.aggregate(yearlyPipeline);
-        
+        console.log(yearlySalesArray)
         res.json(yearlySalesArray);
     } catch (error) {
         console.error(error);
@@ -412,7 +465,7 @@ const getSalesDataWeekly =async (req, res) => {
 
 
 module.exports = {
-    getDashboard,
+  
     getLoginPage,
     verifyLogin,
     getLogout,
@@ -424,6 +477,10 @@ module.exports = {
     getSalesDataYearly,
     getSalesDataWeekly,
     loadDashboard,
-    showGraph
+    showGraph,
+    salesReportpage,
+    getWeekGraph,
+    getMonthGraph,
+    getYearGraph
 
 }
