@@ -9,13 +9,7 @@ const moment = require("moment")
 const filter = require('../helpers/cronFilter.js')
 const helpers = require('../helpers/adminHelpers')
 
-// const getDashboard = async (req, res) => {
-//     try {
-//         res.render("index")
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
+
 
 const getLoginPage = async (req, res) => {
     try {
@@ -131,19 +125,10 @@ const loadDashboard = expressHandler(async (req, res) => {
         const allOrders = await helpers.getAllOrders();
         const todoMessage = await helpers.getTodoList();
 
-        // var totalSales = 0;
-        // for (let i = 0; i < allOrders.length; i++) {
-        //     totalSales += allOrders[i].totalAmount + allOrders[i].walletAmount
-        // }
-   
-        // console.log(topProducts)
         const timeWiseOrders = await helpers.timeWiseOrders()
 
         const newarr = helpers.newArray(timeWiseOrders);
-        // console.log(newarr);
-        // const year=helpers.getYearRatio(newarr);
-        // const month=helpers.getMonthRatio(newarr);
-        // const week=helpers.getWeekRatio(newarr);
+       
         const day = helpers.getDayRatio(newarr);
         res.render("dashboard", {
             title: "Dashboard",
@@ -182,7 +167,7 @@ const generateSalesReport = async (req, res, next) => {
         const paymentMethod = req.query.paymentMethod;
         console.log(fromDate)
         console.log(toDate)
-        // Create a filter object based on the selected payment method
+        
         let paymentMethodFilter;
         if (paymentMethod !== 'all') {
             paymentMethodFilter = { payment_method: paymentMethod };
