@@ -93,6 +93,7 @@ fetch(url, {
                 }
             })
             .then((data) => {
+                console.log(data)
                 const table = generateTable(data);
                 tableContainer.appendChild(table);
                 addGrandTotalRow(table, data);

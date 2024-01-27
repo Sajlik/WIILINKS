@@ -159,13 +159,12 @@ const addCategory = async (req, res) => {
                 });
                 await newCategory.save();
                 console.log("New Category : ", newCategory);
-                res.redirect("/admin/allCategory");
+                res.redirect("/admin/category");
             } else {
                 console.log("Category Already exists");
-                // You can render a view or redirect with a message indicating that the category already exists
-                // res.render('./admin/categoryAlreadyExists', { title: 'Category Already Exists', category: categoryExists });
-                // // or
-                // // res.redirect("/admin/categoryAlreadyExists");
+                const categoryData = await Category.find({})
+                res.render('category',{message:"Category Already exists", category: categoryData })
+
             }
         } else {
             console.log("Description required");
@@ -181,14 +180,7 @@ const addCategory = async (req, res) => {
     }
 };
 
-const getAllCategories = async (req, res) => {
-    try {
-        const categoryData = await Category.find({})
-        res.render("category", { category: categoryData })
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+
 
 
 const getListCategory = async (req, res) => {
@@ -254,7 +246,6 @@ const editCategory = async (req, res) => {
 module.exports = {
     getCategoryInfo,
     addCategory,
-    getAllCategories,
     getListCategory,
     getUnlistCategory,
     editCategory,

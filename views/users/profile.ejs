@@ -1,5 +1,33 @@
 <%- include("../layouts/header") %>
-
+<style>
+    .pagination {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .btn {
+      /* Add your button styling here */
+      margin: 0 5px;
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      text-decoration: none;
+      color: #333;
+    }
+    
+    .active {
+      /* Add styles for the active page */
+     
+      color: #fff;
+    }
+    
+    .btn:hover {
+      /* Add styles for button hover state */
+      background-color: #ddd;
+    }
+    
+    
+    </style>
 
     <main class="main">
         <div class="page-header breadcrumb-wrap">
@@ -97,7 +125,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
-                                                    <table class="table">
+                                                    <table class="table" id="orderDetailsTable" >
                                                         <thead>
                                                             <tr>
                                                                 <th>Order</th>
@@ -142,6 +170,32 @@
                                                     </table>
                                                 </div>
                                             </div>
+                                            <% if (totalPages) { %>
+                                                <div class="pagination">
+                                                  <% if (currentPage > 1) { %>
+                                                    <button class="btn btn-sm"><a href="/profile?page=<%= currentPage - 1 %>">Previous</a></button>
+                                                  <% } %>
+                                              
+                                                  <% if(currentPage < totalPages) { %> 
+                                                    <% if(!currentPage == 1){ %>
+                                                    <button class="btn btn-sm ">
+                                                      <a href="/profile?page=<%= currentPage-1 %>"><%= currentPage-1 %></a>
+                                                    </button>
+                                                    <% } %>
+                                                    <button class="btn btn-sm <%= currentPage === currentPage ? 'active' : '' %>">
+                                                      <a href="/profile?page=<%= currentPage %>"><%= currentPage %></a>
+                                                    </button>
+                                                    <button class="btn btn-sm ">
+                                                      <a href="/profile?page=<%= currentPage+1 %>"><%= currentPage+1 %></a>
+                                                    </button>
+                                                  <% } %>
+                                              
+                                                  <% if (currentPage < totalPages) { %>
+                                                    <button class="btn btn-sm"><a href="/profile?page=<%= currentPage + 1 %>">Next</a></button>
+                                                  <% } %>
+                                                </div>
+                                              <% } %>
+                                            
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="track-orders" role="tabpanel"
@@ -242,22 +296,24 @@
                                         <div class="row">
 
                                             <%if(userAddress){%>
-                                                <%userAddress.address.forEach((address)=>{%>
+                                                <%userAddress.address.forEach((address,i)=>{%>
                                                     <div class="col-lg-6">
                                                         <div class="card  mb-3 mb-lg-0">
                                                             <div class="card-header">
                                                                 <h5 class="mb-0">
-                                                                    <%=address.addressType%>
+                                                                    Address <%= i+1 %>
                                                                 </h5>
                                                             </div>
 
                                                             <div class="card-body">
                                                                 <address>
-                                                                    <%=address.name%><br />
-                                                                        <%=address.city%>,<br />
-                                                                            <%=address.landMark%> <br />
-                                                                                <%=address.state%>
+                                                                    Address <%= i %>
                                                                 </address>
+                                                                <p><%=address.name%><br>
+                                                                    <%=address.city%>,<br>
+                                                                        <%=address.landMark%> <br>
+                                                                    <%=address.addressType%><br>
+                                                                            <%=address.state%></p>
                                                                 <p>
                                                                     <%=address.pincode%>
                                                                 </p>
@@ -357,10 +413,10 @@
                                                                     success: (data) => {
                                                                         if (data.razorpay) {
                                                                             var options = {
-                                                                                "key": "rzp_test_sPwoxcRC0hnSFO",
+                                                                                "key": "rzp_test_EVNp4wsh9aflyN",
                                                                                 "amount": data.order.amount,
                                                                                 "currency": "INR",
-                                                                                "name": "LapLux",
+                                                                                "name": "WIILINKS",
                                                                                 "description": "Test Transaction",
                                                                                 "image": "https://example.com/your_logo",
                                                                                 "order_id": data.order.id,
@@ -415,7 +471,16 @@
                                                                 })
                                                             }
 
-
+                                                            jQuery(document).ready(function () {
+                                                                jQuery('#orderDetailsTable').DataTable({
+                                                                    "paging": true,
+                                                                    "lengthChange": false,
+                                                                    "searching": false,
+                                                                    "ordering": true,
+                                                                    "info": true,
+                                                                    "autoWidth": false
+                                                           });
+                                                        });
 
                                                         </script>
 

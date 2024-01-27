@@ -76,12 +76,9 @@ const getCheckoutPage = async (req, res) => {
             const today = new Date().toISOString(); // Get today's date in ISO format
 
             const findCoupons = await Coupon.find({
-                isList: true,
-                createdOn: { $lt: new Date(today) },
-                expireOn: { $gt: new Date(today) },
-                minimumPrice: { $lt: grandTotal },
+                isList: true
             });
-
+            console.log(findCoupons)
             res.render("checkout", { data: data, user: findUser, isCart: true, userAddress: addressData, isSingle: false, grandTotal, coupons: findCoupons })
         }
 
@@ -325,15 +322,15 @@ const getOrderListPageAdmin = async (req, res) => {
     try {
         const orders = await Order.find({}).sort({ createdOn: -1 });
 
-        // console.log(req.query);
+         console.log(req.query);
 
-        let itemsPerPage = 3
+        let itemsPerPage = 8
         let currentPage = parseInt(req.query.page) || 1
         let startIndex = (currentPage - 1) * itemsPerPage
         let endIndex = startIndex + itemsPerPage
-        let totalPages = Math.ceil(orders.length / 3)
+        let totalPages = Math.ceil(orders.length / 8)
         const currentOrder = orders.slice(startIndex, endIndex)
-
+        console.log(totalPages)
         res.render("orders-list", { orders: currentOrder, totalPages, currentPage })
     } catch (error) {
         console.log(error.message);

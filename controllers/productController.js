@@ -143,11 +143,11 @@ const editProduct = async (req, res) => {
                 processor: data.processor,
                 createdOn: new Date(),
             }, { new: true })
-            console.log("product updated");
+            console.log(pro);
             res.redirect("/admin/products")
         }
 
-
+console.log(regularPrice);
 
     } catch (error) {
         console.log(error.message);

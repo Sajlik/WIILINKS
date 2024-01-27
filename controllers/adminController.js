@@ -180,8 +180,8 @@ const generateSalesReport = async (req, res, next) => {
                 $gte: fromDate,
                 $lte: toDate,
             },
-            ...paymentMethodFilter,
-        }).select("orderId totalPrice orderedDate payment_method -_id");
+            
+        }).select(" totalPrice createdOn payment _id");
         console.log(salesData)
         res.status(200).json(salesData);
     } catch (error) {

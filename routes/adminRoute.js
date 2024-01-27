@@ -29,7 +29,6 @@ admin_router.get('/getgraphyear',admincontroller.getYearGraph)
 
  admin_router.get("/category", isAdmin, categoryController.getCategoryInfo)
  admin_router.post("/addCategory", isAdmin, categoryController.addCategory)
- admin_router.get("/allCategory", isAdmin, categoryController.getAllCategories)
  admin_router.get("/listCategory", isAdmin, categoryController.getListCategory)
  admin_router.get("/unListCategory", isAdmin, categoryController.getUnlistCategory)
  admin_router.get("/editCategory", isAdmin, categoryController.getEditCategory)

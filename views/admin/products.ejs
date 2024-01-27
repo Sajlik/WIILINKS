@@ -26,6 +26,7 @@
                 <th scope="col"><b>Product name</b></th>
                 <th scope="col"><b>Image</b></th>
                 <th scope="col"><b>Category</b></th>
+                <th scope="col"><b>Regular Price</b></th>
                 <th scope="col"><b>Sale Price</b></th>
                 <th scope="col"><b>Action</b></th>
                 <th scope="col"><b>Edit</b></th>
@@ -37,6 +38,7 @@
                         <td><%= data[i].productName %></td>
                         <td><img width="50" src="/uploads/product-images/<%=data[i].productImage[0]%>"></td>
                         <td><%= data[i].category %></td>
+                        <td>₹<%= data[i].regularPrice %></td>
                         <td>₹<%= data[i].salePrice %></td>
                         
                         <td> 

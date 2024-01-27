@@ -411,14 +411,20 @@
                     },
                     success: function (response) {
                         if (response.method === "cod") {
-                            Swal.fire({
-                                title: "Order success",
-                                text: "Order placed successfully",
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 2000,
-                            })
-                            location.href("/orderHistory")
+        Swal.fire({
+            title: "Order success",
+            text: "Order placed successfully",
+            icon: "success",
+            showConfirmButton: true,
+            confirmButtonText: "View Orders",
+            reverseButtons: true,
+            timer: 2000,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the profile page
+                window.location.href = "/profile";
+            }
+        });
                         } else if (response.method === "online") {
 
                             let orderAmount = Math.round(numericValue * 100)

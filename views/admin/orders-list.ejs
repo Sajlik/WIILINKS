@@ -108,11 +108,24 @@
                             <button class="btn btn-sm"><a href="/admin/orderList?page=<%= currentPage - 1 %>">Previous</a></button>
                           <% } %>
                       
-                          <% for (let i = 1; i <= totalPages; i++) { %> 
+                          <% if(currentPage < totalPages) { %> 
+                            <% if(!currentPage == 1){ %>
+                            <button class="btn btn-sm ">
+                              <a href="/admin/orderList?page=<%= currentPage-1 %>"><%= currentPage-1 %></a>
+                            </button>
+                            <% } %>
+                            <button class="btn btn-sm <%= currentPage === currentPage ? 'active' : '' %>">
+                              <a href="/admin/orderList?page=<%= currentPage %>"><%= currentPage %></a>
+                            </button>
+                            <button class="btn btn-sm ">
+                              <a href="/admin/orderList?page=<%= currentPage+1 %>"><%= currentPage+1 %></a>
+                            </button>
+                          <% } %>
+                          <!-- <% for (let i = 1; i <= totalPages; i++) { %> 
                             <button class="btn btn-sm <%= i === currentPage ? 'active' : '' %>">
                               <a href="/admin/orderList?page=<%= i %>"><%= i %></a>
                             </button>
-                          <% } %>
+                          <% } %> -->
                       
                           <% if (currentPage < totalPages) { %>
                             <button class="btn btn-sm"><a href="/admin/orderList?page=<%= currentPage + 1 %>">Next</a></button>

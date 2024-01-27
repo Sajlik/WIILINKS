@@ -16,7 +16,14 @@ const getUserProfile = async (req, res) => {
         // console.log(addressData);
         const orderData = await Order.find({userId : userId}).sort({createdOn : -1})
         // console.log(orderData);
-        res.render("profile", { user: userData, userAddress: addressData, order : orderData })
+        let itemsPerPage = 8
+        let currentPage = parseInt(req.query.page) || 1
+        let startIndex = (currentPage - 1) * itemsPerPage
+        let endIndex = startIndex + itemsPerPage
+        let totalPages = Math.ceil(orderData.length / 8)
+        const currentOrder = orderData.slice(startIndex, endIndex)
+        console.log(totalPages)
+        res.render("profile", { user: userData, userAddress: addressData, order : currentOrder , totalPages, currentPage })
     } catch (error) {
         console.log(error.message);
     }
@@ -281,7 +288,7 @@ const verifyForgotPassOtp = async (req, res) => {
   
             res.json({status : true})
         } else {
-            console.log('jijijijij');
+           
             res.json({status:false})
         }
     } catch (error) {

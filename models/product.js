@@ -14,7 +14,10 @@ var ProductSchema = new mongoose.Schema({
         required: true,
         
     },
-  
+    regularPrice: { 
+        type: Number, 
+        required: true
+    },
     salePrice: { 
         type: Number, 
         required: true

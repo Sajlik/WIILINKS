@@ -39,6 +39,9 @@
         background-color: #0056b3;
         border-color: #0056b3;
     }
+    .perror{
+        color: red;
+    }
 </style>
 
 
@@ -48,6 +51,9 @@
         <div>
             <h2 class="content-title card-title">Category </h2>
             <p>Add, edit or delete a categoryegory</p>
+            <% if(locals.message) {%>
+                <p class="perror"><%= locals.message %></p>
+                <% } %>
         </div>
         <div>
             <input type="text" placeholder="Search category" class="form-control bg-white">
@@ -129,5 +135,21 @@
         </div> <!-- card body .// -->
     </div> <!-- card .// -->
 </section> <!-- content-main end// -->
+<div id="categoryExistsModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <p>Category already exists. Choose a different name.</p>
+    </div>
+</div>
 
+<script>
+    // Script to handle modal functionality
+    function openModal() {
+        document.getElementById('categoryExistsModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('categoryExistsModal').style.display = 'none';
+    }
+</script>
 <%- include("../layouts/adminFooter") %>

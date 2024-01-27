@@ -87,7 +87,7 @@ function monthly()
         
         const thisMonth = today;
         
-        for (let i = 0; i < 12; i++) {
+        for (let i = 11; i >= 0; i--) {
             const monthStart = new Date(thisMonth);
             const monthEnd = new Date(thisMonth);
         
