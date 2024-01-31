@@ -7,7 +7,7 @@ const Coupon = require("../models/couponModel")
 const  nodemailer=require("nodemailer")
 
 const bcrypt = require('bcrypt');
-const {application} = require("express")
+
 
 const pageNotFound=async(req,res)=>{
     try{
@@ -18,14 +18,6 @@ const pageNotFound=async(req,res)=>{
     }
 }
 
-const securePassword= async(password)=>{
-    try{
-           const passwordHash=await bcrypt.hash(password,10)
-           return passwordHash
-    }catch{
-             console.log(error.message);
-          }
-}
 // Index
 const loadLandingPage = async (req, res) => {
     try {

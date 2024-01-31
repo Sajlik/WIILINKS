@@ -6,6 +6,7 @@ const cartController=require('../controllers/cartController')
 const userProfileController = require("../controllers/userProfileController")
 const orderController = require('../controllers/orderController')
 const walletController = require('../controllers/walletController')
+const wishlistController = require('../controllers/wishlistController')
 const { isLogged } = require("../middileware/auth.js")
 
 userRoute.get("/pageNotFound", userController.pageNotFound)
@@ -45,6 +46,9 @@ userRoute.post("/verifyPassOtp", userProfileController.verifyForgotPassOtp)
 userRoute.get("/resetPassword", userProfileController.getResetPassPage)
 userRoute.post("/changePassword", userProfileController.postNewPassword)
 
+userRoute.get("/wishlist", isLogged, wishlistController.getWishlistPage)
+userRoute.get("/addToWishlist",isLogged, wishlistController.addToWishlist)
+userRoute.get("/deleteWishlist", isLogged, wishlistController.deleteItemWishlist)
 
 userRoute.get("/checkout",isLogged, orderController.getCheckoutPage)
 userRoute.post("/orderPlaced",isLogged, orderController.orderPlaced)

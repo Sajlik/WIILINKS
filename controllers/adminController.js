@@ -181,7 +181,7 @@ const generateSalesReport = async (req, res, next) => {
                 $lte: toDate,
             },
             
-        }).select(" totalPrice createdOn payment _id");
+        }).select(" totalPrice  payment _id");
         console.log(salesData)
         res.status(200).json(salesData);
     } catch (error) {
